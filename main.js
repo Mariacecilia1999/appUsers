@@ -9,15 +9,32 @@ const users = [{
 }]
 
 
+const adding = () =>{
+   return{
+      name: $('#inputName').value,
+      id: id()
+   }
+}
+
 
 const  btnAddUser = (e) =>{
    e.preventDefault()
-   users.push({
-      name: $('#inputName').value,
-      id: id()
-})
+   const arrNew = [...get('users'), adding()]
+   set('users', arrNew)
+   showUsers(get('users'))
    $('#inputName').value = ''
-   set('users', users)
+
+}
+
+
+
+const showUsers = (arr) =>{
+   $('#showUsers').innerHTML = ''
+   for(const users of arr){
+      $('#showUsers').innerHTML += `<div>
+                              <h4>${users.name}</h4>
+                           </div>`
+   }
 }
 
 
@@ -28,6 +45,7 @@ const  initializer = () =>{
       get('users')
    }
    $('#btnAddUser').addEventListener('click', btnAddUser)
+   showUsers(get('users'))
 }
 
 window.addEventListener('load', initializer)
