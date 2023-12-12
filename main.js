@@ -33,9 +33,18 @@ const showUsers = (arr) =>{
    for(const users of arr){
       $('#showUsers').innerHTML += `<div>
                               <h4>${users.name}</h4>
+                              <a onclick="deleteUser('${users.id}')">Eliminar</a>
+
                            </div>`
    }
 }
+
+const deleteUser = (id) =>{
+   const filterUsers = get('users').filter(user => user.id != id)
+   set('users', filterUsers)
+   showUsers(get('users'))
+}
+
 
 
 const  initializer = () =>{
