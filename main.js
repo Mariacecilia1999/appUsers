@@ -34,17 +34,39 @@ const showUsers = (arr) =>{
       $('#showUsers').innerHTML += `<div>
                               <h4>${users.name}</h4>
                               <a onclick="deleteUser('${users.id}')">Eliminar</a>
-
+                              <a onclick="connectedUser('${users.id}')">Conectado</a>
                            </div>`
    }
 }
 
 const deleteUser = (id) =>{
-   const filterUsers = get('users').filter(user => user.id != id)
+   const findUser = get('users').find(user => user.id === id)
+   const filterUsers = get('users').filter(user => user.id != findUser.id)
    set('users', filterUsers)
+
+   set('usersDeletes',[...get('usersDeletes'),findUser])
+
    showUsers(get('users'))
+   showDelete(get('usersDeletes'))
 }
 
+const showDelete = (arr) =>{
+   $('#deleted').innerHTML = '<h2>Eliminadas:</h2>'
+  for(const deleteUser of arr){
+         $('#deleted').innerHTML += `<h3>${deleteUser.name}</<h3>`
+      }
+   }
+
+
+const connectedUser = (id) =>{
+   const findConnected = get('users').find(user => user.id === id)
+   console.log(findConnected)
+   const filter = get('users').filter(user => user.id !== findConnected.id)
+   console.log(filter)
+   set('users', filter)
+   set('connected',[...get('connected'),findConnected])
+   showUsers(get('users'))
+}
 
 
 const  initializer = () =>{
@@ -52,9 +74,22 @@ const  initializer = () =>{
       set('users', users)
    }else{
       get('users')
+      if(get('users').length >= 1){
+         showUsers(get('users'))
+      }
    }
+   if(!get('usersDeletes')){
+      set('usersDeletes', [])
+   }else{
+      get('usersDeletes')
+      if(get('usersDeletes').length >= 1){
+      showDelete(get('usersDeletes'))
+   }}
+   if(!get('connected')){
+      set('connected', [])
+   }
+
    $('#btnAddUser').addEventListener('click', btnAddUser)
-   showUsers(get('users'))
 }
 
 window.addEventListener('load', initializer)
